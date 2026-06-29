@@ -15,6 +15,8 @@ router.put("/:id", authorize("faculty", "admin"), asyncHandler(events.update));
 router.delete("/:id", authorize("faculty", "admin"), asyncHandler(events.remove));
 router.post("/:id/register", authorize("student"), asyncHandler(events.register));
 router.delete("/:id/register", authorize("student"), asyncHandler(events.cancel));
+router.get("/:id/certificate", authorize("student"), asyncHandler(events.certificate));
 router.get("/:id/participants", authorize("faculty", "admin"), asyncHandler(events.participants));
+router.get("/:id/participants.csv", authorize("faculty", "admin"), asyncHandler(events.participantsCsv));
 router.get("/:id/attendance-qr", authorize("faculty", "admin"), asyncHandler(events.attendanceQr));
 export default router;

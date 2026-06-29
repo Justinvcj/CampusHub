@@ -30,7 +30,14 @@ try {
     const deadline = new Date(starts.getTime() - 2 * 86400000);
     await connection.query("INSERT INTO events(title,description,venue,starts_at,category,banner_url,max_capacity,registration_deadline,organizer_id,department,status) VALUES (?,?,?,?,?,?,?,?,?,?,?)", [`${eventNames[(i - 1) % 10]} ${Math.ceil(i / 10)}`, "Connect, learn, and build alongside curious people from across campus.", `Campus Hall ${1 + (i % 5)}`, starts, categories[i % 5], "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&w=1200&q=80", 80 + i, deadline, 102 + (i % 20), departments[i % 5], "published"]);
   }
-  for (let i = 1; i <= 150; i++) await connection.query("INSERT INTO registrations(event_id,user_id,status,attended) VALUES (?,?,?,?)", [1 + (i % 50), 2 + (i % 100), "registered", i % 3 === 0]);
+  let registrationCount = 0;
+  for (let eventId = 1; eventId <= 50; eventId++) {
+    for (let offset = 0; offset < 3; offset++) {
+      registrationCount += 1;
+      const userId = 2 + ((eventId * 3 + offset) % 100);
+      await connection.query("INSERT INTO registrations(event_id,user_id,status,attended) VALUES (?,?,?,?)", [eventId, userId, "registered", registrationCount % 3 === 0]);
+    }
+  }
   for (let i = 1; i <= 100; i++) await connection.query("INSERT INTO club_members(club_id,user_id,status) VALUES (?,?,?)", [1 + (i % 10), 2 + (i % 100), "active"]);
   const items = ["Black wallet","Silver water bottle","Student ID card","Wireless earbuds","Blue backpack","House keys","Scientific calculator","Reading glasses"];
   for (let i = 1; i <= 40; i++) await connection.query("INSERT INTO lost_items(title,description,category,location,item_date,item_type,status,reporter_id) VALUES (?,?,?,?,?,?,?,?)", [`${items[i % 8]} ${i}`, "Distinctive personal item reported through the campus community.", ["Accessories","Electronics","Documents"][i % 3], `Block ${String.fromCharCode(65 + i % 5)}`, new Date(Date.now() - i * 86400000), i % 2 ? "lost" : "found", "open", 2 + (i % 100)]);

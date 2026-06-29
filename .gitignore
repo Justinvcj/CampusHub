@@ -7,3 +7,4 @@ server/uploads/*
 coverage/
 *.log
 .tools/
+.mysql/
