@@ -85,10 +85,6 @@ Responses use `{ success, data }`; failures use `{ success: false, message, erro
 
 Use a managed MySQL database, persistent object storage instead of the local upload folder, HTTPS, a transactional email provider, secret management, and a reverse proxy. Run the client build behind a CDN and the API as a separate service.
 
-## Screenshots
-
-Add current screenshots to `docs/screenshots/` after deploying the target environment.
-
 ## Future Enhancements
 
 Native push notifications, calendar synchronization, offline event tickets, SSO, advanced attendance hardware integration, and institution-level multi-tenancy are natural next steps.
