@@ -1,0 +1,22 @@
+import { Router } from "express";
+import { body } from "express-validator";
+import { authenticate, authorize } from "../middlewares/auth.js";
+import { validate } from "../middlewares/validate.js";
+import { upload } from "../middlewares/upload.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import * as clubs from "../controllers/clubController.js";
+import * as posts from "../controllers/postController.js";
+
+const router = Router();
+router.use(authenticate);
+router.get("/", asyncHandler(clubs.list));
+router.post("/", authorize("faculty", "admin"), upload.single("logo"), body("name").trim().notEmpty(), validate, asyncHandler(clubs.create));
+router.put("/:id", authorize("faculty", "admin"), asyncHandler(clubs.update));
+router.delete("/:id", authorize("faculty", "admin"), asyncHandler(clubs.remove));
+router.post("/:id/join", authorize("student"), asyncHandler(clubs.join));
+router.delete("/:id/join", authorize("student"), asyncHandler(clubs.leave));
+router.get("/:id/members", asyncHandler(clubs.members));
+router.post("/:id/announcements", authorize("faculty", "admin"), body("title").notEmpty(), body("body").notEmpty(), validate, asyncHandler(clubs.announce));
+router.get("/:clubId/posts", asyncHandler(posts.list));
+router.post("/:clubId/posts", upload.single("image"), body("body").notEmpty(), validate, asyncHandler(posts.create));
+export default router;

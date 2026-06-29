@@ -1,0 +1,20 @@
+import { Router } from "express";
+import { body } from "express-validator";
+import { authenticate, authorize } from "../middlewares/auth.js";
+import { validate } from "../middlewares/validate.js";
+import { upload } from "../middlewares/upload.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import * as events from "../controllers/eventController.js";
+
+const router = Router();
+router.use(authenticate);
+router.get("/", asyncHandler(events.list));
+router.get("/:id", asyncHandler(events.get));
+router.post("/", authorize("faculty", "admin"), upload.single("banner"), body("title").trim().notEmpty(), body("startsAt").isISO8601(), body("maxCapacity").isInt({ min: 1 }), validate, asyncHandler(events.create));
+router.put("/:id", authorize("faculty", "admin"), asyncHandler(events.update));
+router.delete("/:id", authorize("faculty", "admin"), asyncHandler(events.remove));
+router.post("/:id/register", authorize("student"), asyncHandler(events.register));
+router.delete("/:id/register", authorize("student"), asyncHandler(events.cancel));
+router.get("/:id/participants", authorize("faculty", "admin"), asyncHandler(events.participants));
+router.get("/:id/attendance-qr", authorize("faculty", "admin"), asyncHandler(events.attendanceQr));
+export default router;
