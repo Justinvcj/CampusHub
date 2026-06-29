@@ -2,6 +2,8 @@
 
 CampusHub is a full-stack college management platform that brings events, clubs, lost and found, notifications, and campus administration into one role-aware workspace.
 
+Built by Justin.
+
 ## Features
 
 - Student, faculty, and admin dashboards with live statistics and Chart.js reporting
